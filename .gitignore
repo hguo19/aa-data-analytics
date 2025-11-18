@@ -1,6 +1,9 @@
 # Downloaded data
 data/
 
+# Environment variables
+.env
+
 # Python
 __pycache__/
 *.py[cod]
