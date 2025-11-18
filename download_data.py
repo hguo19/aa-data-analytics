@@ -6,14 +6,27 @@ This script connects to all available free data endpoints and saves the results.
 
 import json
 import os
+import sys
 from datetime import datetime
 from pathlib import Path
 import requests
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
 
 # API Configuration
-API_KEY = "aa_qETUMuuGkupxdvNENxihRqIAEypXWWhc"
+API_KEY = os.getenv('AA_API_KEY')
 BASE_URL = "https://artificialanalysis.ai/api/v2"
+
+# Validate API key is set
+if not API_KEY:
+    print("Error: AA_API_KEY environment variable is not set!")
+    print("\nPlease follow these steps:")
+    print("1. Copy .env.example to .env")
+    print("2. Edit .env and add your API key")
+    print("3. Get a free API key from: https://artificialanalysis.ai/documentation")
+    sys.exit(1)
 
 # Available endpoints
 ENDPOINTS = {
@@ -52,11 +65,11 @@ def download_endpoint_data(endpoint_name: str, endpoint_path: str) -> dict:
         response.raise_for_status()
 
         data = response.json()
-        print(f"✓ Successfully downloaded {endpoint_name} data")
+        print(f"[OK] Successfully downloaded {endpoint_name} data")
         return data
 
     except requests.exceptions.RequestException as e:
-        print(f"✗ Error downloading {endpoint_name}: {e}")
+        print(f"[ERROR] Error downloading {endpoint_name}: {e}")
         return None
 
 
